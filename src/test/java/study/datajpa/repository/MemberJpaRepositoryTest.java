@@ -26,11 +26,11 @@ class MemberJpaRepositoryTest {
 
         Member findMember = memberJpaRepository.find(savedMember.getId());
 
-        // 기본적을 == 코드임!
+        // 기본적으로 == 코드임!
         // JPA 특성상 같은 트랜잭션 안에서는 영속성 컨텍스트의 동일성을 보장한다.
-        assertThat(findMember.getId()).isEqualTo(member.getId());
-        assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
-        assertThat(findMember).isEqualTo(member);
+//        assertThat(findMember.getId()).isEqualTo(member.getId());
+//        assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
+//        assertThat(findMember).isEqualTo(member);
     }
 
 }

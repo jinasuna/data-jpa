@@ -28,7 +28,10 @@ public class Member {
     private int age;
 
     // Team과 Member 사이에 서로 연관관계를 맵핑하는 메소드를 만들어 줘야 한다.
-    @ManyToOne // 회원은 팀 하나에만 소속될 수 있다. (이쪽에서 Team의 키 중 하나를 외래키로 가져온다)
+    // ManytoOne관계는 페치에 대한 기본 스타일이 eager로 되어 있는데, LAZY로 꼭 바꿔줘야 한다.
+    // -> JPA에서 모든 연관관계는 지연로딩(LAZY)으로 세팅해야 하기 때문에
+    // -> 즉시 로딩(eager)걸려 있으면 성능 최적화 하기가 굉장히 힘들다.
+    @ManyToOne(fetch = FetchType.LAZY) // 회원은 팀 하나에만 소속될 수 있다. (이쪽에서 Team의 키 중 하나를 외래키로 가져온다)
     @JoinColumn(name = "team_id") // 이게 외래키 이름이 된다.
     private Team team;
 
@@ -46,7 +49,6 @@ public class Member {
         if(team!=null) {
             changeTeam(team);
         } // 무시했음
-
     }
 
     // 멤버는 내가 속한 팀을 변경할 수 있다. -> Team에 가서도 세팅 해주기 연관관계를 한번에 세팅?
@@ -54,5 +56,5 @@ public class Member {
         this.team = team; // 객체이기 때문에 내 Team만 바꿔주는게 아니라 반대쪽의 Member도 바꿔줘야 한다.
         team.getMembers().add(this); // 와 이걸 이걸로 이렇게 바꾸네!! 쌉편함
     }
-
+    // 지연 로딩 : 멤버를 조회할 때에는 딱 멤버만 조회하는것. 팀은 가차 객체로 가지고 있다가 팀 값을 실제로 사용할 때 DB에서 쿼리를 해온다.
 }

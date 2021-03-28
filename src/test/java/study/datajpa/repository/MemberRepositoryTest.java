@@ -9,6 +9,8 @@ import study.datajpa.entity.Member;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 @Transactional
 @Rollback(false)
@@ -21,6 +23,10 @@ public class MemberRepositoryTest {
         Member savedMember = memberRepository.save(member);
 
         // 있을수도 있고 없을수도 있어서 Optional로 반환
-        Optional<Member> byId = memberRepository.findById(savedMember.getId());
+        Member findMember = memberRepository.findById(savedMember.getId()).get();
+
+        assertThat(findMember.getId()).isEqualTo(member.getId());
+        assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
+        assertThat(findMember).isEqualTo(member);
     }
 }
